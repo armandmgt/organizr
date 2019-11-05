@@ -1,0 +1,29 @@
+{
+  "name": "organizr",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-watch src/index.js"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.7",
+    "apollo-server-express": "^2.9.7",
+    "cors": "^2.8.5",
+    "express": "latest",
+    "graphql": "^14.5.8"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.0",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.0",
+    "babel-plugin-import-graphql": "^2.7.0",
+    "babel-watch": "^7.0.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.18.2"
+  }
+}
