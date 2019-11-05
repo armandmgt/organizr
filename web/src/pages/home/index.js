@@ -16,6 +16,11 @@ export const GET_ME = gql`
     me {
       username
     }
+  }
+`;
+
+export const GET_USERS = gql`
+  query {
     users {
       id
       username
@@ -25,12 +30,12 @@ export const GET_ME = gql`
 
 const Home = () => (
   <div>
-    <Query query={GET_ME}>
-      {({ loading, data }) =>
-        loading ? (
-          <div>loading...</div>
-        ) : (
-          <Grid container spacing={3}>
+    <Grid container spacing={3}>
+      <Query query={GET_ME}>
+        {({ loading, data }) =>
+          loading ? (
+            <div>loading...</div>
+          ) : (
             <Grid item xs={12}>
               <StyledPaper>
                 <Typography variant="h4" gutterBottom>
@@ -47,6 +52,14 @@ const Home = () => (
                 </Typography>
               </StyledPaper>
             </Grid>
+          )
+        }
+      </Query>
+      <Query query={GET_USERS}>
+        {({ loading, data }) =>
+          loading ? (
+            <div>loading...</div>
+          ) : (
             <Grid item xs={12}>
               <StyledPaper>
                 <Box position="relative">
@@ -55,10 +68,10 @@ const Home = () => (
                 </Box>
               </StyledPaper>
             </Grid>
-          </Grid>
-        )
-      }
-    </Query>
+          )
+        }
+      </Query>
+    </Grid>
   </div>
 );
 

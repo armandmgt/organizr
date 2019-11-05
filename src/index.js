@@ -11,13 +11,13 @@ const users = {};
 
 const resolvers = {
   Query: {
-    users: () => Object.entries(users).map(([id, user]) => ({ id, ...user })),
+    users: () => Object.values(users),
     user: () => ({}),
     me: () => ({ username: 'Robin Wieruch' }),
   },
   Mutation: {
     addUser: (parent, { username }) => {
-      const user = { username };
+      const user = { id, username };
       users[id] = user;
       id += 1;
       return user;
