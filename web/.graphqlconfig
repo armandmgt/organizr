@@ -1,0 +1,12 @@
+{
+  "name": "Schema",
+  "schemaPath": "../organizr.graphql",
+  "extensions": {
+    "endpoints": {
+      "Organizr Local": {
+        "introspect": false,
+        "url": "http://localhost:8000/graphql"
+      }
+    }
+  }
+}
