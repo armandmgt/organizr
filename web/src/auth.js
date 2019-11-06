@@ -7,4 +7,7 @@ export default {
   setToken(token) {
     return localStorage.setItem(TOKEN_KEY, token);
   },
+  deleteToken() {
+    return localStorage.removeItem(TOKEN_KEY);
+  }
 };

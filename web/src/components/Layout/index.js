@@ -13,14 +13,23 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
+import auth from '../../auth';
+
+const links = [
+  { path: '/', exact: true, title: 'Dashboard', icon: DashboardIcon },
+  { path: '/todos', title: 'Todos', icon: PlaylistAddCheckIcon },
+];
+
 const Layout = ({ title, children }) => {
+  const history = useHistory();
   const [open, setOpened] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpened(true);
@@ -28,6 +37,11 @@ const Layout = ({ title, children }) => {
   const handleDrawerClose = () => {
     setOpened(false);
   };
+  const handleSignOut = () => {
+    auth.deleteToken();
+    history.push('/signin');
+  };
+
   return (
     <Root>
       <ShiftingAppBar position="absolute" open={open}>
@@ -59,19 +73,27 @@ const Layout = ({ title, children }) => {
         </ToolbarIcon>
         <Divider />
         <List>
-          <ListItem to="/" button component={Link}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem to="/todos" button component={Link}>
-            <ListItemIcon>
-              <PlaylistAddCheckIcon />
-            </ListItemIcon>
-            <ListItemText primary="Todos" />
-          </ListItem>
+          {links.map(l => (
+            <ListItem
+              key={l.path}
+              to={l.path}
+              exact={l.exact}
+              button
+              component={NavLink}
+              activeClassName="Mui-selected"
+            >
+              <ListItemIcon>
+                <l.icon />
+              </ListItemIcon>
+              <ListItemText primary={l.title} />
+            </ListItem>
+          ))}
         </List>
+        <SignOutIcon>
+          <IconButton onClick={handleSignOut}>
+            <ExitToAppIcon />
+          </IconButton>
+        </SignOutIcon>
       </AppDrawer>
       <Content>
         <AppBarSpacer />
@@ -158,6 +180,11 @@ const ToolbarIcon = withTheme(styled.div`
   justify-content: flex-end;
   padding: 0 8px;
   ${({ theme }) => css(theme.mixins.toolbar)};
+`);
+
+const SignOutIcon = withTheme(styled(ToolbarIcon)`
+  position: absolute;
+  bottom: 0;
 `);
 
 const Content = styled.div`
