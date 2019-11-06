@@ -10,14 +10,18 @@
     "apollo-server-express": "^2.9.7",
     "cors": "^2.8.5",
     "express": "latest",
-    "graphql": "^14.5.8"
+    "graphql": "^14.5.8",
+    "jsrsasign": "^8.0.12",
+    "mongoose": "^5.7.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.0",
     "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.7.0",
+    "@babel/preset-react": "^7.7.0",
     "babel-plugin-import-graphql": "^2.7.0",
+    "babel-polyfill": "^6.26.0",
     "babel-watch": "^7.0.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.0.1",

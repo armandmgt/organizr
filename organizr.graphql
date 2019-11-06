@@ -6,24 +6,38 @@ schema {
 }
 
 type Mutation {
-  addUser(username: String!): User
+  registerUser(email: String!, password: String!, username: String): RegisterResultOrError
+  signInUser(email: String!, password: String!): SignInResultOrError
 }
 
 type Query {
-  me: User!
-  user(id: ID!): User!
   users: [User!]
+  viewer(token: String!): UserOrError
 }
+
+union UserOrError = User | Error
 
 type User {
   id: ID
-  username: String!
+  email: String!
+  password: String!
+  username: String
 }
 
-enum CacheControlScope {
-  PRIVATE
-  PUBLIC
+union RegisterResultOrError = RegisterResult | Error
+
+type RegisterResult {
+  user: User!
+  token: String!
 }
 
-"The `Upload` scalar type represents a file upload."
-scalar Upload
+type Error {
+  codes: [String!]
+  messages: [String!]
+}
+
+union SignInResultOrError = SignInResult | Error
+
+type SignInResult {
+  token: String!
+}

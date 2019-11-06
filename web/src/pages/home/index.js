@@ -1,20 +1,27 @@
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import withTheme from '@material-ui/core/styles/withTheme';
 import Typography from '@material-ui/core/Typography';
 import { gql } from 'apollo-boost';
 import React from 'react';
 import { Query } from 'react-apollo';
-import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
+import auth from '../../auth';
 import AddUser from '../../components/AddUser';
+import { StyledPaper } from '../../components/StyledPaper';
 import UserList from '../../components/UserList';
 
-export const GET_ME = gql`
-  query {
-    me {
-      username
+export const GET_VIEWER = gql`
+  query($token: String!) {
+    viewer(token: $token) {
+      ... on User {
+        email
+        username
+      }
+      ... on Error {
+        codes
+        messages
+      }
     }
   }
 `;
@@ -31,17 +38,18 @@ export const GET_USERS = gql`
 const Home = () => (
   <div>
     <Grid container spacing={3}>
-      <Query query={GET_ME}>
-        {({ loading, data }) =>
-          loading ? (
+      <Query query={GET_VIEWER} variables={{ token: auth.getToken() || '' }}>
+        {({ loading, data }) => {
+          console.log({ loading, data });
+          return loading ? (
             <div>loading...</div>
-          ) : (
+          ) : data.viewer.email ? (
             <Grid item xs={12}>
               <StyledPaper>
                 <Typography variant="h4" gutterBottom>
                   Hello again,{' '}
                   <Typography variant="h4" component="span" color="primary">
-                    {data.me.username}
+                    {data.viewer.username || data.viewer.email}
                   </Typography>
                 </Typography>
                 <Typography variant="body1">
@@ -52,8 +60,10 @@ const Home = () => (
                 </Typography>
               </StyledPaper>
             </Grid>
-          )
-        }
+          ) : (
+            <Redirect to="/signin" />
+          );
+        }}
       </Query>
       <Query query={GET_USERS}>
         {({ loading, data }) =>
@@ -74,12 +84,5 @@ const Home = () => (
     </Grid>
   </div>
 );
-
-const StyledPaper = withTheme(styled(Paper)`
-  padding: ${({ theme }) => theme.spacing(2)}px;
-  display: flex;
-  overflow: auto;
-  flex-direction: column;
-`);
 
 export default Home;

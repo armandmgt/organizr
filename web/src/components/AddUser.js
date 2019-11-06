@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
-import Paper from '@material-ui/core/Paper';
 import withTheme from '@material-ui/core/styles/withTheme';
 import TextField from '@material-ui/core/TextField';
 import Zoom from '@material-ui/core/Zoom';
@@ -12,11 +11,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { GET_USERS } from '../pages/home';
+import { StyledPaper } from './StyledPaper';
 
 const NAME_REGEX = /^[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+(([',. -][A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff ])?[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]*)*$/;
 const ADD_USER = gql`
   mutation($username: String!) {
-    addUser(username: $username) {
+    registerUser(username: $username) {
       id
       username
     }
@@ -68,21 +68,23 @@ const AddUser = props => {
         onClose={handleClose}
       >
         <Zoom in={open}>
-          <StyledPaper>
-            <Typography variant="h6" id="add-user-modal-title">
-              Add user
-            </Typography>
-            <p id="add-user-modal-description">Add an user to the list</p>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                id="username"
-                label="Username"
-                value={user.username}
-                onChange={handleChangeUsername}
-                error={validate()}
-              />
-            </form>
-          </StyledPaper>
+          <ModalContainer>
+            <StyledPaper>
+              <Typography variant="h6" id="add-user-modal-title">
+                Add user
+              </Typography>
+              <p id="add-user-modal-description">Add an user to the list</p>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  id="username"
+                  label="Username"
+                  value={user.username}
+                  onChange={handleChangeUsername}
+                  error={validate()}
+                />
+              </form>
+            </StyledPaper>
+          </ModalContainer>
         </Zoom>
       </Modal>
     </>
@@ -94,13 +96,12 @@ const StyledFab = withTheme(styled(Fab)`
   margin: ${({ theme }) => theme.spacing(2)}px;
 `);
 
-const StyledPaper = withTheme(styled(Paper)`
+const ModalContainer = styled.div`
   position: absolute;
   top: calc(50% - 200px);
   left: calc(50% - 200px);
   width: 400px;
-  padding: ${({ theme }) => theme.spacing(2)}px;
   outline: none;
-`);
+`;
 
 export default AddUser;

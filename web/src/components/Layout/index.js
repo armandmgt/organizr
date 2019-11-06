@@ -15,7 +15,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
 const Layout = ({ title, children }) => {
@@ -57,20 +59,17 @@ const Layout = ({ title, children }) => {
         </ToolbarIcon>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem to="/" button component={Link}>
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem button>
+          <ListItem to="/todos" button component={Link}>
             <ListItemIcon>
-              <DashboardIcon />
+              <PlaylistAddCheckIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
+            <ListItemText primary="Todos" />
           </ListItem>
         </List>
       </AppDrawer>

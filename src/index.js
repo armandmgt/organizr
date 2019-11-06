@@ -2,26 +2,43 @@ import cors from 'cors';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import Schema from '../organizr.graphql';
+import User from './models/users';
+import createToken from './auth/createToken';
+import verifyToken, { getId } from './auth/verifyToken';
 
 const app = express();
 app.use(cors());
 
-let id = 0;
-const users = {};
-
 const resolvers = {
   Query: {
-    users: () => Object.values(users),
-    user: () => ({}),
-    me: () => ({ username: 'Robin Wieruch' }),
+    users: async () => User.find().exec(),
+    viewer: async (parent, { token }) => {
+      if (!verifyToken(token)) {
+        return { codes: ['invalid_token'], messages: ['Invalid token'] };
+      }
+      const user = await User.findById(getId(token))
+        .select('email password username')
+        .exec();
+      if (user) return user;
+      return { codes: ['invalid_user'], messages: ['Invalid user'] };
+    },
   },
   Mutation: {
-    addUser: (parent, { username }) => {
-      const user = { id, username };
-      users[id] = user;
-      id += 1;
-      return user;
+    registerUser: async (parent, { email, password, username }) => {
+      const user = await new User({
+        email,
+        password,
+        username,
+      }).save();
+      return { user, token: createToken(user._id) };
     },
+  },
+  User: (parent, { _id: id, ...other }) => ({ id, ...other }),
+  UserOrError: {
+    __resolveType: obj => (obj.id ? 'User' : 'Error'),
+  },
+  RegisterResultOrError: {
+    __resolveType: obj => (obj.token ? 'RegisterResult' : 'Error'),
   },
 };
 
