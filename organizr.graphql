@@ -6,6 +6,7 @@ schema {
 }
 
 type Mutation {
+  reset: Boolean!
   registerUser(email: String!, password: String!, username: String): RegisterResultOrError
   signInUser(email: String!, password: String!): SignInResultOrError
 }
@@ -20,7 +21,7 @@ union UserOrError = User | Error
 type User {
   id: ID
   email: String!
-  password: String!
+  passwordHash: String!
   username: String
 }
 

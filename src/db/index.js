@@ -1,4 +1,6 @@
-import { connect, connection, model, Schema } from 'mongoose';
+import { connect, connection, model, Schema, set } from 'mongoose';
+
+set('useCreateIndex', true);
 
 connect(
   'mongodb://armandmgt.fr:27017/organizr',

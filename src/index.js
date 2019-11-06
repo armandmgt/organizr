@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import bcrypt from 'bcrypt';
 import Schema from '../organizr.graphql';
 import User from './models/users';
 import createToken from './auth/createToken';
@@ -24,13 +25,31 @@ const resolvers = {
     },
   },
   Mutation: {
+    reset: async () => {
+      return User.remove({});
+    },
     registerUser: async (parent, { email, password, username }) => {
-      const user = await new User({
-        email,
-        password,
-        username,
-      }).save();
-      return { user, token: createToken(user._id) };
+      const passwordHash = await bcrypt.hash(password, 10);
+      try {
+        const user = await new User({
+          email,
+          passwordHash,
+          username,
+        }).save();
+        return { user, token: createToken(user) };
+      } catch (e) {
+        return { codes: ['email_taken'], messages: ['This email is taken'] };
+      }
+    },
+    signInUser: async (parent, { email, password }) => {
+      const user = await User.where({ email })
+        .findOne()
+        .exec();
+      const match = await bcrypt.compare(password, user.passwordHash || '');
+      if (match) {
+        return { token: createToken(user) };
+      }
+      return { codes: ['invalid_creds'], messages: ['Invalid email/password'] };
     },
   },
   User: (parent, { _id: id, ...other }) => ({ id, ...other }),
@@ -39,6 +58,9 @@ const resolvers = {
   },
   RegisterResultOrError: {
     __resolveType: obj => (obj.token ? 'RegisterResult' : 'Error'),
+  },
+  SignInResultOrError: {
+    __resolveType: obj => (obj.token ? 'SignInResult' : 'Error'),
   },
 };
 

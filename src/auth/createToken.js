@@ -1,7 +1,7 @@
 import { jws } from 'jsrsasign';
 import { TOKEN_CLAIMS, TOKENS_KEY } from './constants';
 
-const createToken = id => {
+const createToken = user => {
   // Header
   const oHeader = { alg: 'HS256', typ: 'JWT' };
   // Payload
@@ -9,7 +9,7 @@ const createToken = id => {
   oPayload.nbf = jws.IntDate.get('now');
   oPayload.iat = jws.IntDate.get('now');
   oPayload.exp = jws.IntDate.get('now + 1day');
-  oPayload.jti = id;
+  oPayload.jti = user._id;
   // Sign JWT, password=616161
   const sHeader = JSON.stringify(oHeader);
   const sPayload = JSON.stringify(oPayload);
