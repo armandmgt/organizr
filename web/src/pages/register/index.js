@@ -6,21 +6,24 @@ import Link from '@material-ui/core/Link';
 import withTheme from '@material-ui/core/styles/withTheme';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { gql } from 'apollo-boost';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import auth from '../../auth';
 import { StyledAvatar } from '../../components/SignInForm/StyledAvatar';
 import { StyledPaper } from '../../components/SignInForm/StyledPaper';
 
-const SIGN_IN = gql`
-  mutation SignInUser($email: String!, $password: String!) {
-    signInUser(email: $email, password: $password) {
-      ... on SignInResult {
+const REGISTER = gql`
+  mutation RegisterUser(
+    $email: String!
+    $password: String!
+    $username: String
+  ) {
+    registerUser(email: $email, password: $password, username: $username) {
+      ... on RegisterResult {
         token
       }
       ... on Error {
@@ -31,21 +34,23 @@ const SIGN_IN = gql`
   }
 `;
 
-const SignIn = () => {
+const Register = () => {
   const history = useHistory();
   const [formData, updateForm] = React.useState({ email: '', password: '' });
+  const handleChangeUsername = ({ target: { value } }) =>
+    updateForm({ ...formData, username: value });
   const handleChangeEmail = ({ target: { value } }) =>
     updateForm({ ...formData, email: value });
   const handleChangePassword = ({ target: { value } }) =>
     updateForm({ ...formData, password: value });
 
-  const [signInUser] = useMutation(SIGN_IN);
+  const [registerUser] = useMutation(REGISTER);
   const handleSubmit = e => {
     e.preventDefault();
-    signInUser({ variables: { ...formData } }).then(
-      ({ data: { signInUser } }) => {
-        if (signInUser.token) {
-          auth.setToken(signInUser.token);
+    registerUser({ variables: { ...formData } }).then(
+      ({ data: { registerUser } }) => {
+        if (registerUser.token) {
+          auth.setToken(registerUser.token);
           history.push('/');
         }
       }
@@ -56,12 +61,24 @@ const SignIn = () => {
     <Container component="main" maxWidth="xs">
       <StyledPaper>
         <StyledAvatar>
-          <LockOutlinedIcon />
+          <EditOutlinedIcon />
         </StyledAvatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Register
         </Typography>
         <Form noValidate onSubmit={handleSubmit}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            onChange={handleChangeUsername}
+          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -96,8 +113,8 @@ const SignIn = () => {
           </SubmitButton>
           <Grid container>
             <Grid item>
-              <Link to="/register" variant="body2" component={RouterLink}>
-                Don’t have an account? Register
+              <Link to="/signin" variant="body2" component={RouterLink}>
+                Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
@@ -116,4 +133,4 @@ const SubmitButton = withTheme(styled(Button)`
   margin: ${({ theme }) => theme.spacing(3, 0, 2)};
 `);
 
-export default SignIn;
+export default Register;

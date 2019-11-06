@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import Home from './pages/home';
+import Register from './pages/register';
 import SignIn from './pages/signin';
 import Todos from './pages/Todos';
 
@@ -11,6 +12,7 @@ function App() {
     <Router>
       <Switch>
         <Route path="/signin" component={SignIn} />
+        <Route path="/register" component={Register} />
         <Route exact path="/">
           <Layout title="Home">
             <Home />

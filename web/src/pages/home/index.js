@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import { gql } from 'apollo-boost';
 import React from 'react';
 import { Query } from 'react-apollo';
-import { Redirect } from 'react-router-dom';
 
 import auth from '../../auth';
 import AddUser from '../../components/AddUser';
@@ -12,7 +11,7 @@ import { StyledPaper } from '../../components/StyledPaper';
 import UserList from '../../components/UserList';
 
 export const GET_VIEWER = gql`
-  query($token: String!) {
+  query Viewer($token: String!) {
     viewer(token: $token) {
       ... on User {
         email
@@ -27,7 +26,7 @@ export const GET_VIEWER = gql`
 `;
 
 export const GET_USERS = gql`
-  query {
+  query ListUsers {
     users {
       id
       username
@@ -39,11 +38,10 @@ const Home = () => (
   <div>
     <Grid container spacing={3}>
       <Query query={GET_VIEWER} variables={{ token: auth.getToken() || '' }}>
-        {({ loading, data }) => {
-          console.log({ loading, data });
-          return loading ? (
+        {({ loading, data }) =>
+          loading ? (
             <div>loading...</div>
-          ) : data.viewer.email ? (
+          ) : (
             <Grid item xs={12}>
               <StyledPaper>
                 <Typography variant="h4" gutterBottom>
@@ -60,10 +58,7 @@ const Home = () => (
                 </Typography>
               </StyledPaper>
             </Grid>
-          ) : (
-            <Redirect to="/signin" />
-          );
-        }}
+          )}
       </Query>
       <Query query={GET_USERS}>
         {({ loading, data }) =>
