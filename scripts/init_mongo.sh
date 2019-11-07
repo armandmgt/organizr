@@ -14,5 +14,5 @@ if [ -n "${MONGO_NON_ROOT_USERNAME:-}" ] && [ -n "${MONGO_NON_ROOT_PASSWORD:-}" 
 	EOJS
 else
 	# print warning or kill temporary mongo and exit non-zero
+	true
 fi
-

@@ -3,7 +3,7 @@ import { connect, connection, model, Schema, set } from 'mongoose';
 set('useCreateIndex', true);
 
 connect(
-  `mongodb://root:${process.env.MONGO_INITDB_ROOT_PASSWORD}@armandmgt.fr:27017/organizr`,
+  `mongodb://${process.env.MONGO_NON_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@armandmgt.fr:27017/${process.env.MONGO_INITDB_DATABASE}`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
