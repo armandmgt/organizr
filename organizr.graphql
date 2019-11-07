@@ -7,16 +7,14 @@ schema {
 
 type Mutation {
   reset: Boolean!
-  registerUser(email: String!, password: String!, username: String): RegisterResultOrError
-  signInUser(email: String!, password: String!): SignInResultOrError
+  registerUser(email: String!, password: String!, username: String): RegisterResult
+  signInUser(email: String!, password: String!): SignInResult
 }
 
 type Query {
   users: [User!]
-  viewer(token: String!): UserOrError
+  viewer(token: String!): User
 }
-
-union UserOrError = User | Error
 
 type User {
   id: ID
@@ -25,19 +23,10 @@ type User {
   username: String
 }
 
-union RegisterResultOrError = RegisterResult | Error
-
 type RegisterResult {
   user: User!
   token: String!
 }
-
-type Error {
-  codes: [String!]
-  messages: [String!]
-}
-
-union SignInResultOrError = SignInResult | Error
 
 type SignInResult {
   token: String!

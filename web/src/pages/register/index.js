@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -9,10 +8,12 @@ import Typography from '@material-ui/core/Typography';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import { gql } from 'apollo-boost';
 import React from 'react';
+import { useMutation } from 'react-apollo';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import auth from '../../auth';
+import ErrorSnackbar from '../../components/ErrorSnackbar';
 import { StyledAvatar } from '../../components/SignInForm/StyledAvatar';
 import { StyledPaper } from '../../components/SignInForm/StyledPaper';
 
@@ -23,13 +24,7 @@ const REGISTER = gql`
     $username: String
   ) {
     registerUser(email: $email, password: $password, username: $username) {
-      ... on RegisterResult {
-        token
-      }
-      ... on Error {
-        codes
-        messages
-      }
+      token
     }
   }
 `;
@@ -44,17 +39,17 @@ const Register = () => {
   const handleChangePassword = ({ target: { value } }) =>
     updateForm({ ...formData, password: value });
 
-  const [registerUser] = useMutation(REGISTER);
+  const [registerUser, { error }] = useMutation(REGISTER);
   const handleSubmit = e => {
     e.preventDefault();
-    registerUser({ variables: { ...formData } }).then(
-      ({ data: { registerUser } }) => {
+    registerUser({ variables: { ...formData } })
+      .then(({ data: { registerUser } }) => {
         if (registerUser.token) {
           auth.setToken(registerUser.token);
           history.push('/');
         }
-      }
-    );
+      })
+      .catch(() => {});
   };
 
   return (
@@ -67,18 +62,6 @@ const Register = () => {
           Register
         </Typography>
         <Form noValidate onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            onChange={handleChangeUsername}
-          />
           <TextField
             variant="outlined"
             margin="normal"
@@ -103,6 +86,15 @@ const Register = () => {
             autoComplete="current-password"
             onChange={handleChangePassword}
           />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            id="username"
+            label="Username"
+            name="name"
+            onChange={handleChangeUsername}
+          />
           <SubmitButton
             type="submit"
             fullWidth
@@ -120,6 +112,11 @@ const Register = () => {
           </Grid>
         </Form>
       </StyledPaper>
+      {error && (
+        <ErrorSnackbar
+          message={error.graphQLErrors[0].extensions.formattedMessage}
+        />
+      )}
     </Container>
   );
 };

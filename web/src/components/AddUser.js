@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
 import { Typography } from '@material-ui/core';
 import Fab from '@material-ui/core/Fab';
 import Modal from '@material-ui/core/Modal';
@@ -8,10 +7,11 @@ import Zoom from '@material-ui/core/Zoom';
 import AddIcon from '@material-ui/icons/Add';
 import { gql } from 'apollo-boost';
 import React from 'react';
+import { useMutation } from 'react-apollo';
 import styled from 'styled-components';
 
 import { GET_USERS } from '../pages/home';
-import { StyledPaper } from './StyledPaper';
+import StyledPaper from './StyledPaper';
 
 const NAME_REGEX = /^[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+(([',. -][A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff ])?[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]*)*$/;
 const ADD_USER = gql`
@@ -58,7 +58,7 @@ const AddUser = props => {
 
   return (
     <>
-      <StyledFab color="primary" aria-label="add" onClick={handleOpen}>
+      <StyledFab color="secondary" aria-label="add" onClick={handleOpen}>
         <AddIcon />
       </StyledFab>
       <Modal

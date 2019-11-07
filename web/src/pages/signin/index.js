@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/react-hooks';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -9,24 +8,20 @@ import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { gql } from 'apollo-boost';
 import React from 'react';
+import { useMutation } from 'react-apollo';
 import { Link as RouterLink } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import auth from '../../auth';
+import ErrorSnackbar from '../../components/ErrorSnackbar';
 import { StyledAvatar } from '../../components/SignInForm/StyledAvatar';
 import { StyledPaper } from '../../components/SignInForm/StyledPaper';
 
 const SIGN_IN = gql`
   mutation SignInUser($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
-      ... on SignInResult {
-        token
-      }
-      ... on Error {
-        codes
-        messages
-      }
+      token
     }
   }
 `;
@@ -39,17 +34,17 @@ const SignIn = () => {
   const handleChangePassword = ({ target: { value } }) =>
     updateForm({ ...formData, password: value });
 
-  const [signInUser] = useMutation(SIGN_IN);
+  const [signInUser, { error }] = useMutation(SIGN_IN);
   const handleSubmit = e => {
     e.preventDefault();
-    signInUser({ variables: { ...formData } }).then(
-      ({ data: { signInUser } }) => {
+    signInUser({ variables: { ...formData } })
+      .then(({ data: { signInUser } }) => {
         if (signInUser.token) {
           auth.setToken(signInUser.token);
           history.push('/');
         }
-      }
-    );
+      })
+      .catch(() => {});
   };
 
   return (
@@ -103,6 +98,11 @@ const SignIn = () => {
           </Grid>
         </Form>
       </StyledPaper>
+      {error && (
+        <ErrorSnackbar
+          message={error.graphQLErrors[0].message}
+        />
+      )}
     </Container>
   );
 };

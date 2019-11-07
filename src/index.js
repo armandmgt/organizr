@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
+import { AuthenticationError, UserInputError } from 'apollo-server';
 import Schema from '../organizr.graphql';
 import User from './models/users';
 import createToken from './auth/createToken';
@@ -15,13 +16,13 @@ const resolvers = {
     users: async () => User.find().exec(),
     viewer: async (parent, { token }) => {
       if (!verifyToken(token)) {
-        return { codes: ['invalid_token'], messages: ['Invalid token'] };
+        throw new AuthenticationError('Invalid token');
       }
       const user = await User.findById(getId(token))
         .select('email password username')
         .exec();
       if (user) return user;
-      return { codes: ['invalid_user'], messages: ['Invalid user'] };
+      throw new AuthenticationError('Invalid token');
     },
   },
   Mutation: {
@@ -38,7 +39,11 @@ const resolvers = {
         }).save();
         return { user, token: createToken(user) };
       } catch (e) {
-        return { codes: ['email_taken'], messages: ['This email is taken'] };
+        const validationErrors = { email: 'Email is not available' };
+        throw new UserInputError('Registration failed', {
+          validationErrors,
+          formattedMessage: Object.values(validationErrors).join(', '),
+        });
       }
     },
     signInUser: async (parent, { email, password }) => {
@@ -49,19 +54,10 @@ const resolvers = {
       if (match) {
         return { token: createToken(user) };
       }
-      return { codes: ['invalid_creds'], messages: ['Invalid email/password'] };
+      throw new AuthenticationError('Invalid credentials');
     },
   },
   User: (parent, { _id: id, ...other }) => ({ id, ...other }),
-  UserOrError: {
-    __resolveType: obj => (obj.id ? 'User' : 'Error'),
-  },
-  RegisterResultOrError: {
-    __resolveType: obj => (obj.token ? 'RegisterResult' : 'Error'),
-  },
-  SignInResultOrError: {
-    __resolveType: obj => (obj.token ? 'SignInResult' : 'Error'),
-  },
 };
 
 const server = new ApolloServer({
