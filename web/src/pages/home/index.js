@@ -2,9 +2,9 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 
 import client from '../../apollo';
-import auth, {GET_VIEWER} from '../../auth';
+import auth, { GET_VIEWER } from '../../auth';
 import UserList from './UserList';
-import {UserRecap} from './UserRecap';
+import { UserRecap } from './UserRecap';
 
 const Home = () => {
   const { viewer } = client.readQuery({

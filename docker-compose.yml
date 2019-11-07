@@ -1,0 +1,8 @@
+mongo-container:
+  image: mongo:latest
+  env_file:
+    - mongo.env
+  ports:
+    - "27017:27017"
+  volumes:
+  command: mongod
