@@ -1,5 +1,10 @@
 import React from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  BrowserRouter as Router,
+  Switch,
+} from 'react-router-dom';
 
 import { RequireAuth } from './auth';
 import Layout from './components/Layout';
@@ -12,8 +17,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/signin" component={SignIn} />
-        <Route path="/register" component={Register} />
+        <Route path="/signin">
+          <SignIn />
+        </Route>
+        <Route path="/register">
+          <Register />
+        </Route>
         <Route exact path="/">
           <RequireAuth>
             <Layout title="Home">
@@ -27,6 +36,9 @@ function App() {
               <Todos />
             </Layout>
           </RequireAuth>
+        </Route>
+        <Route path="*">
+          <Redirect to="/" />
         </Route>
       </Switch>
     </Router>
