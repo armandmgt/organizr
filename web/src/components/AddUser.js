@@ -10,7 +10,7 @@ import React from 'react';
 import { useMutation } from 'react-apollo';
 import styled from 'styled-components';
 
-import { GET_USERS } from '../pages/home';
+import {GET_USERS} from '../pages/home/UserList';
 import StyledPaper from './StyledPaper';
 
 const NAME_REGEX = /^[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]+(([',. -][A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff ])?[A-Za-z\u00C0-\u00D6\u00D8-\u00f6\u00f8-\u00ff]*)*$/;
