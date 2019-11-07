@@ -4,7 +4,10 @@ mongo-container:
   environment:
     MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    MONGO_NON_ROOT_USERNAME: ${MONGO_NON_ROOT_USERNAME}
+    MONGO_NON_ROOT_PASSWORD: ${MONGO_NON_ROOT_PASSWORD}
   ports:
     - "27017:27017"
-  volumes: []
+  volumes:
+    - ./scripts/init_mongo.sh:/docker-entrypoint-initdb.d/init_mongo.sh
   command: mongod
