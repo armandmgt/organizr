@@ -21,6 +21,7 @@ import React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
+import client from '../../apollo';
 import auth from '../../auth';
 
 const links = [
@@ -37,8 +38,9 @@ const Layout = ({ title, children }) => {
   const handleDrawerClose = () => {
     setOpened(false);
   };
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     auth.deleteToken();
+    await client.resetStore();
     history.push('/signin');
   };
 

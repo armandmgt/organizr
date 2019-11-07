@@ -50,6 +50,7 @@ const resolvers = {
       const user = await User.where({ email })
         .findOne()
         .exec();
+      if (!user) throw new AuthenticationError('Invalid credentials');
       const match = await bcrypt.compare(password, user.passwordHash || '');
       if (match) {
         return { token: createToken(user) };
