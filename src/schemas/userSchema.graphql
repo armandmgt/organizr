@@ -24,7 +24,7 @@ type SignInResult {
 
 extend type Query {
     users: [User!]
-    viewer(token: String!): User!
+    viewer: User! @auth
 }
 
 extend type Mutation {

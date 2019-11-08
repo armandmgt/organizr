@@ -3,21 +3,11 @@ import bcrypt from 'bcrypt';
 import User from '../models/users';
 import Todo from '../models/todos';
 import createToken from '../auth/createToken';
-import verifyToken, { getId } from '../auth/verifyToken';
 
 export default {
   Query: {
     users: async () => User.find().exec(),
-    viewer: async (parent, { token }) => {
-      if (!verifyToken(token)) {
-        throw new AuthenticationError('Invalid token');
-      }
-      const user = await User.findById(getId(token))
-        .select('email password username')
-        .exec();
-      if (user) return user;
-      throw new AuthenticationError('Invalid token');
-    },
+    viewer: (parent, args, { me }) => me,
   },
   Mutation: {
     registerUser: async (parent, { email, password, username }) => {
