@@ -12,7 +12,9 @@
     "cors": "^2.8.5",
     "express": "latest",
     "graphql": "^14.5.8",
+    "graphql-iso-date": "^3.6.1",
     "jsrsasign": "^8.0.12",
+    "lodash.merge": "^4.6.2",
     "mongoose": "^5.7.8"
   },
   "devDependencies": {

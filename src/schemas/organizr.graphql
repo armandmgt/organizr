@@ -1,0 +1,14 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Mutation {
+  reset: Boolean!
+}
+
+type Query
+
+scalar Date
+scalar Time
+scalar DateTime

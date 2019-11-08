@@ -1,4 +1,4 @@
-import { connect, connection, model, Schema, set } from 'mongoose';
+import { connect, connection, set, Schema, model } from 'mongoose';
 
 set('useCreateIndex', true);
 

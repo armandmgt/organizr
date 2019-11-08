@@ -8,9 +8,9 @@ import {
 
 import { RequireAuth } from './auth';
 import Layout from './components/Layout';
-import Home from './pages/home';
-import Register from './pages/register';
-import SignIn from './pages/signin';
+import Dashboard from './pages/Dashboard';
+import Register from './pages/Register';
+import SignIn from './pages/Signin';
 import Todos from './pages/Todos';
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
         <Route exact path="/">
           <RequireAuth>
             <Layout title="Home">
-              <Home />
+              <Dashboard />
             </Layout>
           </RequireAuth>
         </Route>

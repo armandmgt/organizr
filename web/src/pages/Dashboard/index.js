@@ -6,7 +6,7 @@ import auth, { GET_VIEWER } from '../../auth';
 import UserList from './UserList';
 import { UserRecap } from './UserRecap';
 
-const Home = () => {
+const Dashboard = () => {
   const { viewer } = client.readQuery({
     query: GET_VIEWER,
     variables: { token: auth.getToken() },
@@ -25,4 +25,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

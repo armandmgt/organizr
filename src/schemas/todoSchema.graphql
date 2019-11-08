@@ -1,0 +1,18 @@
+type Todo {
+  title: String!
+  description: String!
+  dueDate: DateTime
+  done: Boolean
+  labels: [String!]!
+  user: User!
+}
+
+extend type Mutation {
+  createTodo(
+    title: String!
+    description: String!
+    dueDate: DateTime
+    labels: [String!]!
+    user: UserInput!
+  ): Todo!
+}

@@ -1,0 +1,33 @@
+type User {
+    id: ID!
+    email: String!
+    username: String
+    todos: [Todo!]!
+    password: String
+}
+
+input UserInput {
+    "The user's ID"
+    id: ID
+    "The user's email"
+    email: String
+}
+
+type RegisterResult {
+    user: User!
+    token: String!
+}
+
+type SignInResult {
+    token: String!
+}
+
+extend type Query {
+    users: [User!]
+    viewer(token: String!): User!
+}
+
+extend type Mutation {
+    registerUser(email: String!, password: String!, username: String): RegisterResult
+    signInUser(email: String!, password: String!): SignInResult
+}
