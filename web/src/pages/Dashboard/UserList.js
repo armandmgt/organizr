@@ -22,12 +22,12 @@ export const GET_USERS = gql`
 `;
 
 const UserList = () => {
-  const { loading, data } = useQuery(GET_USERS);
+  const { loading, error, data } = useQuery(GET_USERS);
   return (
     <StyledPaper>
       <Box position="relative">
         <Title>Users</Title>
-        {loading ? (
+        {loading || error ? (
           <div>loading...</div>
         ) : (
           <Table size="small">

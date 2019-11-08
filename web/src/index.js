@@ -6,9 +6,11 @@ import { StylesProvider } from '@material-ui/core/styles';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
+import { Router } from 'react-router-dom';
 
 import client from './apollo';
 import App from './App';
+import history from './history';
 import * as serviceWorker from './serviceWorker';
 import theme from './theme';
 
@@ -17,7 +19,9 @@ ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <ApolloProvider client={client}>
-        <App />
+        <Router history={history}>
+          <App />
+        </Router>
       </ApolloProvider>
     </MuiThemeProvider>
   </StylesProvider>,

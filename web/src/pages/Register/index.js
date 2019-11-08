@@ -39,7 +39,9 @@ const Register = () => {
   const handleChangePassword = ({ target: { value } }) =>
     updateForm({ ...formData, password: value });
 
-  const [registerUser, { error }] = useMutation(REGISTER);
+  const [registerUser, { error }] = useMutation(REGISTER, {
+    context: { publicRequest: true },
+  });
   const handleSubmit = e => {
     e.preventDefault();
     registerUser({ variables: { ...formData } })

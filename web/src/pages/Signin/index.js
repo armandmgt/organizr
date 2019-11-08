@@ -34,7 +34,9 @@ const SignIn = () => {
   const handleChangePassword = ({ target: { value } }) =>
     updateForm({ ...formData, password: value });
 
-  const [signInUser, { error }] = useMutation(SIGN_IN);
+  const [signInUser, { error }] = useMutation(SIGN_IN, {
+    context: { publicRequest: true },
+  });
   const handleSubmit = e => {
     e.preventDefault();
     signInUser({ variables: { ...formData } })
@@ -98,11 +100,7 @@ const SignIn = () => {
           </Grid>
         </Form>
       </StyledPaper>
-      {error && (
-        <ErrorSnackbar
-          message={error.graphQLErrors[0].message}
-        />
-      )}
+      {error && <ErrorSnackbar message={error.graphQLErrors[0].message} />}
     </Container>
   );
 };

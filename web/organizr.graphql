@@ -6,6 +6,7 @@ schema {
 }
 
 type Mutation {
+    createTodo(description: String!, dueDate: DateTime, labels: [String!]!, title: String!, user: UserInput!): Todo!
     registerUser(email: String!, password: String!, username: String): RegisterResult
     reset: Boolean!
     signInUser(email: String!, password: String!): SignInResult
@@ -13,7 +14,7 @@ type Mutation {
 
 type Query {
     users: [User!]
-    viewer(token: String!): User!
+    viewer: User!
 }
 
 type RegisterResult {
@@ -29,7 +30,7 @@ type Todo {
     description: String!
     done: Boolean
     dueDate: DateTime
-    label: [String!]
+    labels: [String!]!
     title: String!
     user: User!
 }
@@ -37,6 +38,7 @@ type Todo {
 type User {
     email: String!
     id: ID!
+    password: String
     todos: [Todo!]!
     username: String
 }
@@ -44,6 +46,13 @@ type User {
 enum CacheControlScope {
     PRIVATE
     PUBLIC
+}
+
+input UserInput {
+    "The user's email"
+    email: String
+    "The user's ID"
+    id: ID
 }
 
 
