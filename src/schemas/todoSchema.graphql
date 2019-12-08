@@ -1,4 +1,5 @@
 type Todo {
+  id: ID!
   title: String!
   description: String!
   dueDate: DateTime
@@ -7,12 +8,32 @@ type Todo {
   user: User!
 }
 
+type DeleteTodoResult {
+  ok: Boolean
+  todo: Todo
+}
+
+type UpdateTodoResult {
+  ok: Boolean
+  todo: Todo
+}
+
 extend type Mutation {
   createTodo(
     title: String!
     description: String!
     dueDate: DateTime
     labels: [String!]!
-    user: UserInput!
-  ): Todo!
+  ): Todo! @auth
+
+  deleteTodo(id: ID!): DeleteTodoResult! @auth
+
+  updateTodo(
+    id: ID!
+    title: String!
+    description: String!
+    dueDate: DateTime
+    done: Boolean
+    labels: [String!]!
+  ): UpdateTodoResult! @auth
 }

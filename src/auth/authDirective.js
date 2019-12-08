@@ -1,4 +1,4 @@
-import { DirectiveLocation, GraphQLDirective } from 'graphql';
+import { DirectiveLocation, GraphQLDirective, defaultFieldResolver } from 'graphql';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { AuthenticationError } from 'apollo-server';
 import verifyToken, { getId } from './verifyToken';
@@ -12,7 +12,7 @@ export default class AuthDirective extends SchemaDirectiveVisitor {
   /* eslint-disable no-param-reassign */
   /* eslint-disable class-methods-use-this */
   ensureAuthorizationPerformed(field) {
-    const { resolve } = field;
+    const { resolve = defaultFieldResolver } = field;
 
     field.resolve = async function newResolve(...args) {
       const context = args[2];

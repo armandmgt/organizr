@@ -5,11 +5,18 @@ schema {
     mutation: Mutation
 }
 
+type DeleteTodoResult {
+    ok: Boolean
+    todo: Todo
+}
+
 type Mutation {
-    createTodo(description: String!, dueDate: DateTime, labels: [String!]!, title: String!, user: UserInput!): Todo!
+    createTodo(description: String!, dueDate: DateTime, labels: [String!]!, title: String!): Todo!
+    deleteTodo(id: ID!): DeleteTodoResult!
     registerUser(email: String!, password: String!, username: String): RegisterResult
     reset: Boolean!
     signInUser(email: String!, password: String!): SignInResult
+    updateTodo(description: String!, done: Boolean, dueDate: DateTime, id: ID!, labels: [String!]!, title: String!): UpdateTodoResult!
 }
 
 type Query {
@@ -30,9 +37,15 @@ type Todo {
     description: String!
     done: Boolean
     dueDate: DateTime
+    id: ID!
     labels: [String!]!
     title: String!
     user: User!
+}
+
+type UpdateTodoResult {
+    ok: Boolean
+    todo: Todo
 }
 
 type User {
@@ -46,13 +59,6 @@ type User {
 enum CacheControlScope {
     PRIVATE
     PUBLIC
-}
-
-input UserInput {
-    "The user's email"
-    email: String
-    "The user's ID"
-    id: ID
 }
 
 

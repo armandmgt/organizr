@@ -6,13 +6,6 @@ type User {
     password: String
 }
 
-input UserInput {
-    "The user's ID"
-    id: ID
-    "The user's email"
-    email: String
-}
-
 type RegisterResult {
     user: User!
     token: String!

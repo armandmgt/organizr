@@ -1,8 +1,10 @@
 import 'typeface-roboto';
 
-import { MuiThemeProvider } from '@material-ui/core';
+import MomentUtils from '@date-io/moment';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { StylesProvider } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
@@ -16,14 +18,16 @@ import theme from './theme';
 
 ReactDOM.render(
   <StylesProvider injectFirst>
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <ApolloProvider client={client}>
-        <Router history={history}>
-          <App />
-        </Router>
-      </ApolloProvider>
-    </MuiThemeProvider>
+    <ThemeProvider theme={theme}>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <CssBaseline />
+        <ApolloProvider client={client}>
+          <Router history={history}>
+            <App />
+          </Router>
+        </ApolloProvider>
+      </MuiPickersUtilsProvider>
+    </ThemeProvider>
   </StylesProvider>,
   document.getElementById('root')
 );

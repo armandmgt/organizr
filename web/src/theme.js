@@ -1,21 +1,27 @@
 import { createMuiTheme } from '@material-ui/core';
-import { red, amber } from '@material-ui/core/colors';
+import { amber, green, red } from '@material-ui/core/colors';
+import update from 'immutability-helper';
 
-const theme = createMuiTheme({
+const theme = {
   palette: {
     primary: {
       main: '#2B86DD',
     },
-    secondary: {
-      main: amber.A400,
-    },
-    error: {
-      main: red.A400,
-    },
+    secondary: amber,
+    error: red,
+    valid: green,
     background: {
       default: '#FAFAFA',
     },
   },
-});
+};
 
-export default theme;
+export default createMuiTheme(theme);
+
+export const successTheme = createMuiTheme(
+  update(theme, {
+    palette: {
+      secondary: { $set: { main: '#388e3c' } },
+    },
+  })
+);
