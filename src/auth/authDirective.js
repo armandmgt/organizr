@@ -1,10 +1,15 @@
-import { DirectiveLocation, GraphQLDirective, defaultFieldResolver } from 'graphql';
+import {
+  DirectiveLocation,
+  GraphQLDirective,
+  defaultFieldResolver,
+} from 'graphql';
 import { SchemaDirectiveVisitor } from 'graphql-tools';
 import { AuthenticationError } from 'apollo-server';
 import verifyToken, { getId } from './verifyToken';
 import User from '../models/users';
 
 export default class AuthDirective extends SchemaDirectiveVisitor {
+  // eslint-disable-next-line no-unused-vars
   visitFieldDefinition(field, details) {
     this.ensureAuthorizationPerformed(field);
   }
@@ -29,6 +34,7 @@ export default class AuthDirective extends SchemaDirectiveVisitor {
   /* eslint-enable class-methods-use-this */
   /* eslint-enable no-param-reassign */
 
+  // eslint-disable-next-line no-unused-vars
   static getDirectiveDeclaration(directiveName, schema) {
     return new GraphQLDirective({
       name: directiveName,
