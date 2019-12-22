@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "babel-watch src/index.js"
+    "dev": "babel-watch src/index.js",
+    "start": "node src/index.js"
   },
   "dependencies": {
     "apollo-server": "^2.9.7",
