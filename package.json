@@ -5,9 +5,9 @@
   "scripts": {
     "prebuild": "rm -rf build/*",
     "build": "babel -d ./build ./src",
-    "dev": "babel-watch src/index.js",
+    "dev": "PORT=8000 babel-watch src/index.js",
     "prestart": "npm run-script build",
-    "start": "NODE_ENV=production node ./build/index.js"
+    "start": "NODE_ENV=production PORT=8081 node ./build/index.js"
   },
   "dependencies": {
     "apollo-server": "^2.9.7",
