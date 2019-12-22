@@ -59,19 +59,19 @@ data "aws_iam_policy_document" "beanstalk_assume_role" {
 }
 
 resource "aws_iam_role" "web" {
-  name               = "organizr-beanstalk"
+  name = "organizr-beanstalk"
   assume_role_policy = "${data.aws_iam_policy_document.beanstalk_assume_role.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "web_tier" {
-  role       = "${aws_iam_role.web.id}"
+  role = "${aws_iam_role.web.id}"
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 
 resource "aws_iam_instance_profile" "web" {
   depends_on = ["aws_iam_role_policy_attachment.web_tier"]
-  name       = "organizr-beanstalk"
-  role       = "${aws_iam_role.web.name}"
+  name = "organizr-beanstalk"
+  role = "${aws_iam_role.web.name}"
 }
 
 data "aws_iam_role" "service_role" {
@@ -85,14 +85,20 @@ resource "aws_elastic_beanstalk_environment" "organizr" {
 
   setting {
     namespace = "aws:elasticbeanstalk:environment"
-    name      = "ServiceRole"
-    value     = "${data.aws_iam_role.service_role.name}"
+    name = "ServiceRole"
+    value = "${data.aws_iam_role.service_role.name}"
   }
 
   setting {
     namespace = "aws:autoscaling:launchconfiguration"
-    name      = "IamInstanceProfile"
-    value     = "${aws_iam_instance_profile.web.name}"
+    name = "IamInstanceProfile"
+    value = "${aws_iam_instance_profile.web.name}"
+  }
+  
+  setting {
+    namespace = "aws:elasticbeanstalk:container:nodejs"
+    name = "NodeVersion"
+    value = ""
   }
 }
 
