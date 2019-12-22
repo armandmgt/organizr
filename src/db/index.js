@@ -9,7 +9,5 @@ connect(
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-connection.on('error', console.error.bind(console, 'MongoDB error: '));
-
 export default connection;
 export { Schema, model };
