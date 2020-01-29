@@ -100,6 +100,12 @@ resource "aws_elastic_beanstalk_environment" "organizr" {
     name = "NodeVersion"
     value = ""
   }
+
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name = "EC2KeyName"
+    value = "${aws_key_pair.instance_key.key_name}"
+  }
 }
 
 output "app_version" {
