@@ -6,7 +6,7 @@
     "prebuild": "rm -rf build/*",
     "build": "babel -d ./build ./src",
     "dev": "PORT=8000 babel-watch src/index.js",
-    "prestart": "npm run-script build",
+    "prestart": "npm run-script build && cd web && npm run-script build",
     "start": "NODE_ENV=production PORT=8081 node ./build/index.js"
   },
   "dependencies": {
