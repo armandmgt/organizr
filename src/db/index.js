@@ -5,7 +5,7 @@ set('useFindAndModify', false);
 set('useUnifiedTopology', true);
 
 connect(
-  `mongodb://${process.env.MONGO_NON_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@armandmgt.fr:27017/${process.env.MONGO_INITDB_DATABASE}`,
+  `mongodb://client:616161@vps.armandmgt.fr:27017/organizr`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
