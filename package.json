@@ -15,7 +15,7 @@
     "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.7.0",
     "@babel/preset-react": "^7.7.0",
-    "apollo-server": "^2.9.7",
+    "apollo-server": "^2.14.2",
     "apollo-server-express": "^2.9.7",
     "babel-plugin-import-graphql": "^2.7.0",
     "babel-polyfill": "^6.26.0",
